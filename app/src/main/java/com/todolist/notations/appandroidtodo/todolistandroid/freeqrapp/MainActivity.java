@@ -13,7 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddTaskDialog.TaskDialogListener {
 
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
@@ -43,19 +43,18 @@ public class MainActivity extends AppCompatActivity {
         fabAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Здесь мы можем добавить логику для диалога добавления задачи
-                addNewTask("Новая задача", "Описание новой задачи");
-                Toast.makeText(MainActivity.this, "Задача добавлена", Toast.LENGTH_SHORT).show();
+                // Открытие диалога добавления задачи
+                AddTaskDialog dialog = new AddTaskDialog();
+                dialog.show(getSupportFragmentManager(), "AddTaskDialog");
             }
         });
     }
 
-    // Метод для добавления новой задачи
-    private void addNewTask(String title, String description) {
-        Task newTask = new Task(title, description);
-        taskList.add(newTask);
+    @Override
+    public void onTaskCreated(Task task) {
+        taskList.add(task);
         taskAdapter.notifyItemInserted(taskList.size() - 1);
+        Toast.makeText(this, "Задача добавлена", Toast.LENGTH_SHORT).show();
     }
 }
-
 

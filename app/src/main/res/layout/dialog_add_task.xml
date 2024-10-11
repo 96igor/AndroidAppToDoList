@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edit_task_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Заголовок задачи"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp"
+        android:minHeight="48dp" />
+
+    <EditText
+        android:id="@+id/edit_task_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Описание задачи"
+        android:padding="8dp"
+        android:layout_marginBottom="16dp"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/button_add_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Добавить задачу" />
+</LinearLayout>
