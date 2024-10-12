@@ -9,17 +9,12 @@
         android:id="@+id/edit_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Название задачи"
-        android:inputType="text"
-        android:importantForAccessibility="yes"
-        android:contentDescription="Редактировать название задачи" />
+        android:hint="Заголовок задачи" />
 
     <EditText
         android:id="@+id/edit_task_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Описание задачи"
-        android:inputType="text"
-        android:importantForAccessibility="yes"
-        android:contentDescription="Редактировать описание задачи" />
+        android:hint="Описание задачи" />
+
 </LinearLayout>

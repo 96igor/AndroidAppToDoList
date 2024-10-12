@@ -16,6 +16,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     // Интерфейс для обработки кликов
     public interface OnTaskClickListener {
         void onTaskClick(int position);
+        void onDeleteTaskClick(int position); // Новый метод для удаления
     }
 
     public TaskAdapter(List<Task> taskList, OnTaskClickListener onTaskClickListener) {
@@ -55,6 +56,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             this.onTaskClickListener = onTaskClickListener;
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(v -> {
+                onTaskClickListener.onDeleteTaskClick(getAdapterPosition());
+                return true;
+            });
         }
 
         @Override
