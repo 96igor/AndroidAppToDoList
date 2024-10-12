@@ -1,11 +1,13 @@
 package com.todolist.notations.appandroidtodo.todolistandroid.freeqrapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private TaskAdapter taskAdapter;
     private List<Task> taskList;
     private FloatingActionButton fabAddTask;
+    private static final int REQUEST_CODE_ADD_TASK = 1; // Код для возврата результата
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +55,27 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(taskAdapter);
 
-        // Добавление новой задачи при нажатии на FloatingActionButton
-        fabAddTask.setOnClickListener(view -> {
-            addNewTask("Новая задача", "Описание новой задачи");
-            Toast.makeText(MainActivity.this, "Задача добавлена", Toast.LENGTH_SHORT).show();
-        });
+        // Открытие формы для добавления новой задачи при нажатии на FloatingActionButton
+        fabAddTask.setOnClickListener(view -> openAddTaskForm());
+    }
+
+    // Метод для открытия формы добавления новой задачи
+    private void openAddTaskForm() {
+        Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_ADD_TASK); // Старт активности для добавления задачи
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_ADD_TASK && resultCode == RESULT_OK) {
+            if (data != null) {
+                String title = data.getStringExtra("title");
+                String description = data.getStringExtra("description");
+
+                addNewTask(title, description); // Добавление новой задачи
+            }
+        }
     }
 
     // Метод для добавления новой задачи
