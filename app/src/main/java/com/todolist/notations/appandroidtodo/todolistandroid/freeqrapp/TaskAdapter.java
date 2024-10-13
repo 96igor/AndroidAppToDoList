@@ -1,5 +1,6 @@
 package com.todolist.notations.appandroidtodo.todolistandroid.freeqrapp;
 
+import android.widget.CheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Task task = taskList.get(position);
         holder.titleTextView.setText(task.getTitle());
         holder.descriptionTextView.setText(task.getDescription());
+        holder.checkBox.setChecked(task.isCompleted()); // Устанавливаем состояние CheckBox
+
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            task.setCompleted(isChecked);
+            // Можно сохранять изменения
+        });
     }
 
     @Override
@@ -47,12 +54,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         public TextView titleTextView;
         public TextView descriptionTextView;
+        public CheckBox checkBox;  // Добавляем CheckBox
         OnTaskClickListener onTaskClickListener;
 
         public TaskViewHolder(@NonNull View itemView, OnTaskClickListener onTaskClickListener) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.task_title);
             descriptionTextView = itemView.findViewById(R.id.task_description);
+            checkBox = itemView.findViewById(R.id.task_checkbox);  // Инициализация CheckBox
             this.onTaskClickListener = onTaskClickListener;
 
             itemView.setOnClickListener(this);

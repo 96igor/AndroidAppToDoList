@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     // Метод для отображения диалогового окна редактирования задачи
     private void showEditTaskDialog(int position) {
         Task task = taskList.get(position);
+        task.setLastViewed(System.currentTimeMillis());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Редактировать задачу");
