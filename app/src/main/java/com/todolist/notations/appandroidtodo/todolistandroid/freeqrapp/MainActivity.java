@@ -1,8 +1,6 @@
 package com.todolist.notations.appandroidtodo.todolistandroid.freeqrapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -27,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Task> taskList;
     private FloatingActionButton fabAddTask;
     private static final int REQUEST_CODE_ADD_TASK = 1; // Код для возврата результата
+    private TaskStorage taskStorage; // Добавлено для хранения задач
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         // Инициализация элементов
         recyclerView = findViewById(R.id.recycler_view);
         fabAddTask = findViewById(R.id.fab_add_task);
+
+        // Инициализация TaskStorage
+        taskStorage = new TaskStorage(this); // Инициализация хранилища задач
 
         // Загрузка задач
         loadTasks();
@@ -136,23 +138,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Метод для сохранения задач
     private void saveTasks() {
-        SharedPreferences sharedPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(taskList);
-        editor.putString("task_list", json);
-        editor.apply();
+        taskStorage.saveTasks(taskList); // Использование TaskStorage для сохранения задач
     }
 
     // Метод для загрузки задач
     private void loadTasks() {
-        SharedPreferences sharedPreferences = getSharedPreferences("tasks", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("task_list", null);
-        Type type = new TypeToken<List<Task>>() {}.getType();
-        taskList = gson.fromJson(json, type);
-        if (taskList == null) {
-            taskList = new ArrayList<>();
-        }
+        taskList = taskStorage.loadTasks(); // Использование TaskStorage для загрузки задач
     }
 }

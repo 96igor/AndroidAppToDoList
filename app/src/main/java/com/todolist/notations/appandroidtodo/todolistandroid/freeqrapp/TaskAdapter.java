@@ -1,35 +1,33 @@
 package com.todolist.notations.appandroidtodo.todolistandroid.freeqrapp;
 
-import android.widget.CheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
-
     private List<Task> taskList;
-    private OnTaskClickListener onTaskClickListener;
+    private OnTaskClickListener listener;
 
-    // Интерфейс для обработки кликов
     public interface OnTaskClickListener {
         void onTaskClick(int position);
-        void onDeleteTaskClick(int position); // Новый метод для удаления
+        void onDeleteTaskClick(int position);
     }
 
-    public TaskAdapter(List<Task> taskList, OnTaskClickListener onTaskClickListener) {
+    public TaskAdapter(List<Task> taskList, OnTaskClickListener listener) {
         this.taskList = taskList;
-        this.onTaskClickListener = onTaskClickListener;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task, parent, false);
-        return new TaskViewHolder(view, onTaskClickListener);
+        return new TaskViewHolder(view);
     }
 
     @Override
@@ -37,12 +35,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Task task = taskList.get(position);
         holder.titleTextView.setText(task.getTitle());
         holder.descriptionTextView.setText(task.getDescription());
-        holder.checkBox.setChecked(task.isCompleted()); // Устанавливаем состояние CheckBox
+        holder.checkBox.setChecked(task.isCompleted()); // Устанавливаем состояние чекбокса
 
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            task.setCompleted(isChecked);
-            // Можно сохранять изменения
+            task.setCompleted(isChecked); // Сохраняем состояние задачи
         });
+
+        holder.itemView.setOnClickListener(v -> listener.onTaskClick(position));
+        holder.deleteButton.setOnClickListener(v -> listener.onDeleteTaskClick(position));
     }
 
     @Override
@@ -50,30 +50,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return taskList.size();
     }
 
-    public static class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class TaskViewHolder extends RecyclerView.ViewHolder {
+        TextView titleTextView;
+        TextView descriptionTextView;
+        CheckBox checkBox;
+        View deleteButton;
 
-        public TextView titleTextView;
-        public TextView descriptionTextView;
-        public CheckBox checkBox;  // Добавляем CheckBox
-        OnTaskClickListener onTaskClickListener;
-
-        public TaskViewHolder(@NonNull View itemView, OnTaskClickListener onTaskClickListener) {
+        public TaskViewHolder(View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.task_title);
             descriptionTextView = itemView.findViewById(R.id.task_description);
-            checkBox = itemView.findViewById(R.id.task_checkbox);  // Инициализация CheckBox
-            this.onTaskClickListener = onTaskClickListener;
-
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(v -> {
-                onTaskClickListener.onDeleteTaskClick(getAdapterPosition());
-                return true;
-            });
-        }
-
-        @Override
-        public void onClick(View view) {
-            onTaskClickListener.onTaskClick(getAdapterPosition());
+            checkBox = itemView.findViewById(R.id.task_checkbox);
+            deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
 }

@@ -3,17 +3,16 @@ package com.todolist.notations.appandroidtodo.todolistandroid.freeqrapp;
 public class Task {
     private String title;
     private String description;
-    private boolean isCompleted;
-    private long lastViewed;
+    private boolean isCompleted; // Поле для хранения состояния задачи
+    private long lastViewed; // Поле для хранения времени последнего просмотра задачи
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.isCompleted = false;
-        this.lastViewed = System.currentTimeMillis(); // текущее время
+        this.isCompleted = false; // По умолчанию задача не завершена
+        this.lastViewed = System.currentTimeMillis(); // Устанавливаем текущее время при создании задачи
     }
 
-    // Getters и Setters
     public String getTitle() {
         return title;
     }

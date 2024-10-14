@@ -14,7 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="8dp">
+        android:paddingStart="8dp"
+        android:layout_weight="1"> <!-- Добавлено для распределения пространства -->
 
         <TextView
             android:id="@+id/task_title"
@@ -28,7 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Удалить" /> <!-- Добавлено поле для кнопки удаления -->
 
 </LinearLayout>

@@ -4,38 +4,30 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskStorage {
-    private static final String PREFS_NAME = "task_storage";
-    private static final String KEY_TASKS = "tasks";
-    private SharedPreferences sharedPreferences;
-    private Gson gson;
+    private Context context;
 
     public TaskStorage(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        gson = new Gson();
+        this.context = context;
     }
 
-    // Сохранение задач
-    public void saveTasks(List<Task> tasks) {
+    public void saveTasks(List<Task> taskList) {
+        Gson gson = new Gson();
+        String json = gson.toJson(taskList);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("task_storage", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        String json = gson.toJson(tasks);
-        editor.putString(KEY_TASKS, json);
+        editor.putString("tasks", json);
         editor.apply();
     }
 
-    // Загрузка задач
     public List<Task> loadTasks() {
-        String json = sharedPreferences.getString(KEY_TASKS, null);
-        if (json == null) {
-            // Если данных нет, вернуть пустой список
-            return new ArrayList<>();
-        }
-        Type type = new TypeToken<ArrayList<Task>>() {}.getType();
-        return gson.fromJson(json, type);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("task_storage", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("tasks", null);
+        Type type = new TypeToken<List<Task>>() {}.getType();
+        return json == null ? new ArrayList<>() : new Gson().fromJson(json, type);
     }
 }
